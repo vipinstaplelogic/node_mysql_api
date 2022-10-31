@@ -19,5 +19,18 @@ module.exports = {
                 return callback(null, results);
             }
         );
+    },
+    getUsers: callback => {
+        conn.query(
+            `select fisrtname, lastname, email, mobile from users`, 
+            [],
+            (error, results, fields) => { 
+                if(error){
+                    return callback(error);
+                }  
+                // below return success  
+                return callback(null, results);
+            }
+        );
     }
 }
