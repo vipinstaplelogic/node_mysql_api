@@ -39,14 +39,19 @@ module.exports = {
 
     getUserByUserID: (req, resp) => {
         const user_id = req.params.id;
-        console.log(user_id);
         // call service-method
         getUserByID(user_id, (err, results) => {
             if (err) {
                 console.log(err);
                 return resp.status(500).json({
                     success: 0,
-                    message: 'Records not found',
+                    message: 'Something went wrong',
+                });
+            }
+            if (!results) {
+                return resp.status(500).json({
+                    success: 0,
+                    message: 'Record not found',
                 });
             }
             return resp.status(200).json({
