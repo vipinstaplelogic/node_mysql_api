@@ -1,8 +1,10 @@
 const { create, getUsers, getUserByID, updateUser, deleteUser } = require('./user.service');
-
+const { genSaltSync, hashSync } = require('bcrypt');
 module.exports = {
     createUser: (req, resp) => {
         const body = req.body;
+        const salt = genSaltSync(10);
+        body.password = hashSync(body.password, salt);
         // call service-method
         create(body, (err, results) => {
             if (err) {
@@ -64,6 +66,8 @@ module.exports = {
 
     updateUserData: (req, resp) => {
         const body = req.body;
+        const salt = genSaltSync(10);
+        body.password = hashSync(body.password, salt);
         // call service-method
         updateUser(body, (err, results) => {
             if (err) {
