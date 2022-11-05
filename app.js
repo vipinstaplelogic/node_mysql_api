@@ -1,9 +1,9 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const express = require('express');
 const conn = require('./config/database');
+const express = require('express');
 const app = express();
-const userRouter = require('./user/user.router');
+const userRouter = require('./api/user/user.router');
 
 app.use(express.json());
 
