@@ -11,10 +11,10 @@ module.exports = {
                 data.password,
                 data.mobile
             ],
-            (error, results, fields) => { 
-                if(error){
+            (error, results, fields) => {
+                if (error) {
                     return callback(error);
-                }  
+                }
                 // below return success  
                 return callback(null, results);
             }
@@ -22,12 +22,12 @@ module.exports = {
     },
     getUsers: callback => {
         conn.query(
-            `select fisrtname, lastname, email, mobile from users`, 
+            `select id, fisrtname, lastname, email, mobile from users`,
             [],
-            (error, results, fields) => { 
-                if(error){
+            (error, results, fields) => {
+                if (error) {
                     return callback(error);
-                }  
+                }
                 // below return success  
                 return callback(null, results);
             }
@@ -35,12 +35,12 @@ module.exports = {
     },
     getUserByID: (id, callback) => {
         conn.query(
-            `select fisrtname, lastname, email, mobile from users where id=?`, 
+            `select id, fisrtname, lastname, email, mobile from users where id=?`,
             [id],
-            (error, results, fields) => { 
-                if(error){
+            (error, results, fields) => {
+                if (error) {
                     return callback(error);
-                }  
+                }
                 // below return success  
                 return callback(null, results[0]);
             }
@@ -57,26 +57,40 @@ module.exports = {
                 data.mobile,
                 data.id
             ],
-            (error, results, fields) => { 
-                if(error){
+            (error, results, fields) => {
+                if (error) {
                     return callback(error);
-                }  
+                }
                 // below return success  
                 return callback(null, results);
             }
         );
     },
-    
+
     deleteUser: (data, callback) => {
         conn.query(
-            `delete from users where id=?`, 
+            `delete from users where id=?`,
             [data.id],
-            (error, results, fields) => { 
-                if(error){
+            (error, results, fields) => {
+                if (error) {
                     return callback(error);
-                }  
+                }
                 // below return success  
                 return callback(null, results);
+            }
+        );
+    },
+
+    getUserByUserEmail: (email, callback) => {
+        conn.query(
+            `select * from users where email=?`,
+            [email],
+            (error, results, fields) => {
+                if (error) {
+                    return callback(error);
+                }
+                // below return success  
+                return callback(null, results[0]);
             }
         );
     }

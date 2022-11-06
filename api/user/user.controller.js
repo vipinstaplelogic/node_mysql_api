@@ -1,5 +1,15 @@
-const { create, getUsers, getUserByID, updateUser, deleteUser } = require('./user.service');
-const { genSaltSync, hashSync } = require('bcrypt');
+const {
+    create,
+    getUsers,
+    getUserByID,
+    updateUser,
+    deleteUser,
+    getUserByUserEmail
+} = require('./user.service');
+
+const { genSaltSync, hashSync, compareSync } = require('bcrypt');
+const { sign } = require("jsonwebtoken")
+
 module.exports = {
     createUser: (req, resp) => {
         const body = req.body;
@@ -102,4 +112,41 @@ module.exports = {
             });
         });
     },
+
+    loginByEmail: (req, resp) => {
+        const body = req.body;
+        // call service-method
+        getUserByUserEmail(body.email, (err, results) => {
+            if (err) {
+                console.log(err);
+                return resp.status(500).json({
+                    success: 0,
+                    message: 'Record not deleted',
+                });
+            }
+            if (!results) {
+                return resp.json({
+                    success: 0,
+                    message: 'Invalid username or Password',
+                });
+            }
+
+            const compPassword = compareSync(body.password, results.password);
+            if (compPassword) {
+                results.password = undefined;
+                // password match, now generate json token
+                const jsontoken = sign({ result: results }, "qwerty123", { expiresIn: "1h" });
+                return resp.status(200).json({
+                    success: 1,
+                    message: 'Login successfully',
+                    token: jsontoken
+                });
+            } else {
+                return resp.json({
+                    success: 0,
+                    message: 'Invalid username or Password',
+                });
+            }
+        });
+    }
 }
